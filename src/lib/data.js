@@ -31,25 +31,20 @@ export const getValue = (data, path = '/') => {
 * @param path String : path where set the value in data
 * @param value : value to set in data
 */
-export const setValue = (data = {}, path, value) => {
+export const setValue = (data = {}, path = '/', value) => {
   path = absolutePath(path)
-
   if (path === '/') {
     return value
   }
   const paths = path.split('/').filter(item => item)
   let tmp = data
   for (let index = 0; index < paths.length; index++) {
-    if (tmp === undefined || tmp === null) {
-      break
-    }
     const p = paths[index]
     if (index === (paths.length - 1)) {
       tmp[p] = value
-    } else if (p in tmp) {
-      tmp = tmp[p]
-    } else {
       break
+    } else {
+      tmp = tmp[p]
     }
   }
   return data

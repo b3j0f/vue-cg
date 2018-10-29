@@ -1,3 +1,4 @@
+import {check} from '../util'
 import {absolutePath, concatPath} from '@/lib/path'
 
 describe('absolutePath', () => {
@@ -20,13 +21,7 @@ describe('absolutePath', () => {
     misc: {params: ['././'], expectation: '/'},
     misc2: {params: ['../../'], expectation: '/'}
   }
-  Object.entries(tests).forEach(
-    ([key, {params, expectation}]) => {
-      it(key, () => {
-        expect(absolutePath(...params)).toEqual(expectation)
-      })
-    }
-  )
+  check(absolutePath, tests)
 })
 
 describe('concatPath', () => {
@@ -37,11 +32,5 @@ describe('concatPath', () => {
     relative: {params: ['a/b', 'c'], expectation: '/a/b/c'},
     relative2: {params: ['a/b/', '..'], expectation: '/a'}
   }
-  Object.entries(tests).forEach(
-    ([key, {params, expectation}]) => {
-      it(key, () => {
-        expect(concatPath(...params)).toEqual(expectation)
-      })
-    }
-  )
+  check(concatPath, tests)
 })

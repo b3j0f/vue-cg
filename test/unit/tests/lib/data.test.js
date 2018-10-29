@@ -1,3 +1,4 @@
+import {check} from '../util'
 import {getValue, setValue} from '@/lib/data'
 
 describe('getValue', () => {
@@ -33,16 +34,20 @@ describe('getValue', () => {
     absoluteBack: {params: [data, '/0/1/..'], expectation: data[0]},
     absoluteBackBack: {params: [data, '/../..'], expectation: data}
   }
-  Object.entries(values).forEach(
-    ([key, {params, expectation}]) => {
-      it(key, () => {
-        expect(getValue(...params)).toEqual(expectation)
-      })
-    }
-  )
+  check(getValue, values)
 })
 
 describe('setValue', () => {
-  it('', () => {
-  })
+  const seed = Math.random()
+  const values = {
+    undefined: {params: [], expectation: undefined},
+    null: {params: [null, 'a', seed], error: TypeError},
+    true: {params: [true, 'a', seed], error: TypeError},
+    false: {params: [false, 'a', seed], error: TypeError},
+    string: {params: ['string', 'a', seed], error: TypeError},
+    array: {params: [[1, 2, 3], '0', seed], expectation: [seed, 2, 3]},
+    object: {params: [{a: false}, 'a', seed], expectation: {a: seed}},
+    deep: {params: [{a: {b: true}}, 'a/b', seed], expectation: {a: {b: seed}}}
+  }
+  check(setValue, values)
 })
