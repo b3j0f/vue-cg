@@ -9,7 +9,7 @@ describe('getValue', () => {
       }
     }
   }
-  const values = {
+  const tests = {
     undefined: {params: [undefined], expectation: undefined},
     null: {params: [null], expectation: null},
     object: {params: [{}], expectation: {}},
@@ -34,12 +34,12 @@ describe('getValue', () => {
     absoluteBack: {params: [data, '/0/1/..'], expectation: data[0]},
     absoluteBackBack: {params: [data, '/../..'], expectation: data}
   }
-  check(getValue, values)
+  check(getValue, tests)
 })
 
 describe('setValue', () => {
   const seed = Math.random()
-  const values = {
+  const tests = {
     undefined: {params: [], expectation: undefined},
     null: {params: [null, 'a', seed], error: TypeError},
     true: {params: [true, 'a', seed], error: TypeError},
@@ -49,5 +49,5 @@ describe('setValue', () => {
     object: {params: [{a: false}, 'a', seed], expectation: {a: seed}},
     deep: {params: [{a: {b: true}}, 'a/b', seed], expectation: {a: {b: seed}}}
   }
-  check(setValue, values)
+  check(setValue, tests)
 })

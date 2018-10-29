@@ -1,5 +1,5 @@
-export const check = (fn, values) => {
-  Object.entries(values).forEach(
+export const check = (fn, tests) => {
+  Object.entries(tests).forEach(
     ([key, value]) => {
       const {params = [], expectation, error} = value
       it(key, () => {

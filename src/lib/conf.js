@@ -197,7 +197,7 @@ const defaultConfs = {
 }
 
 export const setConfs = values => {
-  Object.assign(defaultConfs, values)
+  return Object.assign(defaultConfs, values)
 }
 export const getConfs = values => {
   return Object.assign({}, defaultConfs, values)
