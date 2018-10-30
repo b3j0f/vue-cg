@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const check = (fn, tests) => {
   Object.entries(tests).forEach(
     ([key, value]) => {
@@ -15,4 +17,10 @@ export const check = (fn, tests) => {
       })
     }
   )
+}
+
+export const getVM = (ref, propsData = {}) => {
+  const Component = Vue.extend(ref)
+  const vm = new Component({propsData}).$mount()
+  return vm
 }

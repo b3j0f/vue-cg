@@ -135,7 +135,7 @@ function guid () {
 
 export default {
   name: 'ComponentGeneratorContent',
-  mixins: [conf, data, path, schema, validation],
+  mixins: [conf, data, path, schema],
   props: {
     id: {
       type: String,
