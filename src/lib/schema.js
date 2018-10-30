@@ -1,3 +1,5 @@
+import {absolutePath} from './path'
+
 export const getDefaultValue = (schema = {}) => {
   let result
   if ('default' in schema) {
@@ -22,11 +24,11 @@ export const getDefaultValue = (schema = {}) => {
           result = []
           if (Array.isArray(items)) {
             result = items.map(getDefaultValue)
-            if (result.length < minItems && additionalItems) {
+            if ((result.length < minItems) && additionalItems) {
               result = [
                 ...result,
-                Array(minItems - result.length).fill(
-                  () => getDefaultValue(additionalItems)
+                ...Array(minItems - result.length).fill().map(
+                  () => getDefaultValue(additionalItems === true ? {} : additionalItems)
                 )
               ]
             }
@@ -56,7 +58,8 @@ export const getDefaultValue = (schema = {}) => {
 */
 export const getSchema = (schema = {}, path = '/') => {
   let result = schema
-  const paths = path.split('/').filter(item => item)
+  path = absolutePath(path)
+  const paths = path.split('/').filter(p => p)
   for (let p of paths) {
     const {type = 'object'} = result
     if (type === 'object') {
@@ -68,11 +71,16 @@ export const getSchema = (schema = {}, path = '/') => {
       }
       const {patternProperties} = result
       if (patternProperties) {
+        let found = false
         for (let pattern in patternProperties) {
-          if (p.match(new RegExp(pattern))) {
+          if (p.match(pattern)) {
+            found = true
             result = patternProperties[pattern]
-            continue
+            break
           }
+        }
+        if (found) {
+          break
         }
       }
       const {additionalProperties = true} = result
@@ -81,25 +89,18 @@ export const getSchema = (schema = {}, path = '/') => {
         continue
       }
     } else if (type === 'array') {
-      const index = Number(p)
-      if (!isNaN(index)) {
-        const {items = {}, additionalItems = true} = result
-        if (Array.isArray(items)) {
-          if (index < items.length) {
-            result = items[index]
-            continue
-          } else if (additionalItems) {
-            if (additionalItems === true) {
-              result = {}
-            } else {
-              result = additionalItems
-            }
-            continue
-          }
-        } else {
-          result = items
+      const {items, additionalItems = true} = result
+      if (Array.isArray(items)) {
+        if (p in items) {
+          result = items[p]
           continue
         }
+      } else if (items) {
+        result = items
+        continue
+      } else if (additionalItems) {
+        result = additionalItems === true ? {} : additionalItems
+        continue
       }
     }
     result = undefined
@@ -112,24 +113,39 @@ export const getSchema = (schema = {}, path = '/') => {
 *
 * By default, schema is of type object, and arrays are set of object items.
 */
-export const generateSchema = (data = {}) => {
+export const generateSchema = (data = {}, dft = false) => {
   const result = {
     type: Array.isArray(data) ? 'array' : ((data === null || data === undefined) ? 'object' : typeof data)
   }
+  if (dft) {
+    result.default = data
+  }
   if (result.type === 'object') {
-    result.properties = {}
     Object.entries(data).forEach(
       ([name, value]) => {
-        result.properties[name] = generateSchema(value)
+        if (result.properties === undefined) {
+          result.properties = {}
+        }
+        result.properties[name] = generateSchema(value, dft)
       }
     )
   } else if (result.type === 'array') {
     result.items = {}
-    data.forEach(
-      item => {
-        Object.assign(result.items, generateSchema(item))
+    if (data.length) {
+      const type = typeof data[0]
+      for (let i = 1; i < data.length; i++) {
+        const itype = typeof data[i]
+        if (itype !== type) {
+          result.items = []
+          break
+        }
       }
-    )
+    }
+    if (Array.isArray(result.items)) {
+      result.items = data.map(d => generateSchema(d, dft))
+    } else {
+      result.items = generateSchema(data[0], dft)
+    }
   }
   return result
 }
