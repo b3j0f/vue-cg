@@ -1,1 +1,1 @@
-export {Generator, Plugin, getConfs, setConfs} from './src'
+export {FormGenerator, ComponentGenerator, Plugin, getConfs, setConfs} from './src'

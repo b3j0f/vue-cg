@@ -97,7 +97,6 @@ export const generateValidations = (schema = {}) => {
     }
   }
   if (type === 'boolean') {
-
   }
   if (type === 'object') {
     Object.entries(properties).forEach(
