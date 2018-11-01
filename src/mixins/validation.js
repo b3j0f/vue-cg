@@ -1,4 +1,4 @@
-import {getValidations} from '@/lib'
+import { getValidations } from '@/lib'
 import path from './path'
 import conf from './conf'
 
@@ -12,7 +12,7 @@ export default {
   computed: {
     errors () {
       let result = false
-      const {$params, ...validations} = this.$v
+      const { $params, ...validations } = this.$v
       Object.entries(validations).forEach(
         ([name, validation]) => {
           if (validation === false) {
@@ -37,7 +37,7 @@ export default {
   methods: {
     validate () {
       this.$v.$touch()
-      this.$emit('error', {path: this.finalPath, errors: this.errors})
+      this.$emit('error', { path: this.finalPath, errors: this.errors })
     },
     getValidations (path) {
       const finalPath = this.finalPath

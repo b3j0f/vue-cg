@@ -1,11 +1,11 @@
-import {absolutePath} from './path'
+import { absolutePath } from './path'
 
 export const getDefaultValue = (schema = {}) => {
   let result
   if ('default' in schema) {
     result = typeof schema.default === 'object' ? Object.assign(schema.default.constructor(), schema.default) : schema.default
   } else {
-    const {type} = schema
+    const { type } = schema
     switch (type) {
       case 'number':
         result = 0
@@ -20,7 +20,7 @@ export const getDefaultValue = (schema = {}) => {
       case 'array':
       default:
         if (type === 'array') {
-          const {minItems = 0, items, additionalItems = true} = schema
+          const { minItems = 0, items, additionalItems = true } = schema
           result = []
           if (Array.isArray(items)) {
             result = items.map(getDefaultValue)
@@ -61,7 +61,7 @@ export const getSchema = (schema = {}, path = '/') => {
   path = absolutePath(path)
   const paths = path.split('/').filter(p => p)
   for (let p of paths) {
-    const {type = 'object'} = result
+    const { type = 'object' } = result
     if (type === 'object') {
       if ('properties' in result) {
         if (p in result.properties) {
@@ -69,7 +69,7 @@ export const getSchema = (schema = {}, path = '/') => {
           continue
         }
       }
-      const {patternProperties} = result
+      const { patternProperties } = result
       if (patternProperties) {
         let found = false
         for (let pattern in patternProperties) {
@@ -83,13 +83,13 @@ export const getSchema = (schema = {}, path = '/') => {
           break
         }
       }
-      const {additionalProperties = true} = result
+      const { additionalProperties = true } = result
       if (additionalProperties !== false) {
         result = additionalProperties === true ? {} : additionalProperties
         continue
       }
     } else if (type === 'array') {
-      const {items, additionalItems = true} = result
+      const { items, additionalItems = true } = result
       if (Array.isArray(items)) {
         if (p in items) {
           result = items[p]

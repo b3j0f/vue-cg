@@ -1,4 +1,4 @@
-import {getSchema, getDefaultValue} from '@/lib'
+import { getSchema, getDefaultValue } from '@/lib'
 import path from './path'
 
 export default {

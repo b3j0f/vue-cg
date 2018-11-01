@@ -2,7 +2,7 @@ const defaultConfs = {
   default: {
     is: 'div'
   },
-  password: ({id, path}) => ({
+  password: ({ id, path }) => ({
     is: 'input',
     container: true,
     props: {
@@ -18,7 +18,7 @@ const defaultConfs = {
       text: name
     }
   }),
-  boolean: ({id, name, path}) => ({
+  boolean: ({ id, name, path }) => ({
     is: 'input',
     container: true,
     props: {
@@ -34,7 +34,7 @@ const defaultConfs = {
       text: name
     }
   }),
-  string: ({id, name, path, schema, value}) => {
+  string: ({ id, name, path, schema, value }) => {
     if (schema.enum) {
       return {
         container: true,
@@ -84,7 +84,7 @@ const defaultConfs = {
       }
     }
   },
-  number: ({id, name, path}) => ({
+  number: ({ id, name, path }) => ({
     is: 'input',
     container: true,
     props: {
@@ -100,13 +100,13 @@ const defaultConfs = {
       text: name
     }
   }),
-  object: ({add, schema, remove, id, scope}) => ({
+  object: ({ add, schema, remove, id, scope }) => ({
     container: true,
     is: 'div',
     after: {
       container: true,
       show: () => {
-        const {additionalProperties = true, patternProperties = {}} = schema
+        const { additionalProperties = true, patternProperties = {} } = schema
         return additionalProperties || Object.keys(patternProperties).length > 0
       },
       props: {
@@ -130,7 +130,7 @@ const defaultConfs = {
             inner: {
               text: 'add'
             },
-            handlers: ({data}) => ({
+            handlers: ({ data }) => ({
               click: () => add(undefined, data)
             })
           }
@@ -140,7 +140,7 @@ const defaultConfs = {
     inner: {
       '*': {
         container: true,
-        after: ({name, schema}) => ({
+        after: ({ name, schema }) => ({
           show: schema.required === undefined || !(name in schema.required),
           is: 'button',
           inner: {
@@ -153,12 +153,12 @@ const defaultConfs = {
       }
     }
   }),
-  array: ({add, remove, moveForward, moveBackward}) => ({
+  array: ({ add, remove, moveForward, moveBackward }) => ({
     container: true,
     is: 'div',
     inner: {
       container: true,
-      after: ({name}) => [{
+      after: ({ name }) => [{
         is: 'button',
         inner: {
           text: 'remove'

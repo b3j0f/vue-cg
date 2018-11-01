@@ -1,4 +1,4 @@
-import {concatPath} from '@/lib'
+import { concatPath } from '@/lib'
 
 export default {
   props: {

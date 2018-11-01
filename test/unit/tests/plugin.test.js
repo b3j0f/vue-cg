@@ -1,4 +1,4 @@
-import { check } from '../util'
+import { check } from './util'
 import { setConfs, getConfs } from '@/lib/conf'
 
 const confs = getConfs()

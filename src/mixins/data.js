@@ -1,4 +1,4 @@
-import {getValue} from '@/lib'
+import { getValue } from '@/lib'
 import path from './path'
 import schema from './schema'
 

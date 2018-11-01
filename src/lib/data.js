@@ -1,4 +1,4 @@
-import {absolutePath} from '@/lib/path'
+import { absolutePath } from '@/lib/path'
 
 /** Get value relative to input path and data.
 *

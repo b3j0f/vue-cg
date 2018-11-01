@@ -1,4 +1,4 @@
-import {getConfs} from '@/lib'
+import { getConfs } from '@/lib'
 import path from './path'
 
 export default {
@@ -113,7 +113,7 @@ export default {
     },
     getConf (conf, schema, confs) {
       let result = conf
-      let {mixins = true} = conf
+      let { mixins = true } = conf
       const finalConfs = getConfs(confs)
       if (mixins) {
         const id = conf.is || (schema && schema.type) || 'default'
@@ -162,12 +162,12 @@ export default {
       }
 
       if (typeof result === 'boolean') {
-        result = {show: result}
+        result = { show: result }
         if (!result.show) {
           return result
         }
       } else if (typeof result === 'string') {
-        result = {is: result}
+        result = { is: result }
       }
 
       if (result && typeof result !== 'object') {
