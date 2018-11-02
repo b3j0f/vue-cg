@@ -122,7 +122,7 @@
  *
  * Generate vue components from a javascript dictionnary.
  */
-import {conf, data, path, schema} from '@/mixins'
+import {conf, data, path, schema, validation} from '@/mixins'
 
 function guid () {
   function s4 () {
@@ -135,7 +135,7 @@ function guid () {
 
 export default {
   name: 'ComponentGeneratorContent',
-  mixins: [conf, data, path, schema],
+  mixins: [conf, data, path, schema, validation],
   props: {
     id: {
       type: String,
