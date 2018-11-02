@@ -79,7 +79,12 @@ describe('properties', () => {
   const tests = {
     true: { params: [{ properties: true }], expectation: {} },
     array: { params: [{ properties: ['a'] }], expectation: { a: { is: 'a', show: true } } },
-    object: { params: [{ properties: { a: true } }], expectation: {} }
+    object: { params: [{ properties: { a: true } }], expectation: { a: { is: 'div', show: true } } },
+    string: { params: [{ properties: 'a' }], expectation: { is: 'a', show: true } }
   }
   check(func, tests)
+  it('trueSchema', () => {
+    const cmpt = mixedComponent({ conf: { properties: true }, baseSchema: { properties: { a: { type: 'number' } } } })
+    expect(cmpt.properties).toEqual({ a: fill() })
+  })
 })

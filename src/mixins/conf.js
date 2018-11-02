@@ -15,17 +15,14 @@ export default {
   },
   computed: {
     properties () {
-      let result = Array.from(this.finalConf.properties)
+      let result = this.finalConf.properties
 
       if (result) {
         if (result === true) {
           result = {}
-          Object.entries(this.schema.properties).foreach(
+          Object.entries(this.schema.properties || {}).forEach(
             ([name, property]) => {
-              result[name] = this.normalize({
-                ...property,
-                path: name
-              })
+              result[name] = this.normalize({}, property)
             }
           )
         } else if (typeof result === 'object') {
