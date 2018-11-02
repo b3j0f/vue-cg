@@ -1,4 +1,4 @@
-import { concatPath } from '@/lib'
+import { concatPath, absolutePath } from '@/lib'
 
 export default {
   props: {
@@ -13,7 +13,7 @@ export default {
       return path.substring(path.lastIndexOf('/') + 1)
     },
     finalPath () {
-      let result = this.path
+      let result = absolutePath(this.path)
       if (this.conf) {
         const conf = this.resolve(this.conf)
         if (conf.path) {

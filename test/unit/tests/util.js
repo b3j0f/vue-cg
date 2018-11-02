@@ -3,7 +3,7 @@ import Vue from 'vue'
 export const check = (fn, tests) => {
   Object.entries(tests).forEach(
     ([key, value]) => {
-      const {params = [], expectation, error, func} = value
+      const { params = [], expectation, error, func } = value
       it(key, () => {
         if ('expectation' in value) {
           let res = fn(...params)
@@ -19,8 +19,12 @@ export const check = (fn, tests) => {
   )
 }
 
-export const getVM = (ref, propsData = {}) => {
-  const Component = Vue.extend(ref)
-  const vm = new Component({propsData}).$mount()
-  return vm
+export const newComponent = mixin => (propsData = {}, on = {}) => {
+  const Constructor = Vue.extend({ mixins: [mixin], render () { return null } })
+
+  const result = new Constructor({ propsData }).$mount()
+  Object.entries(on).forEach(
+    ([key, handler]) => result.$on(key, handler)
+  )
+  return result
 }
