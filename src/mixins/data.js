@@ -12,6 +12,19 @@ export default {
   computed: {
     data () {
       return this.getData()
+    },
+    items () {
+      let result = Array.from(this.finalConf.items)
+      if (result) {
+        if (Array.isArray(result)) {
+          result = this.data.map(
+            (item, index) => result[Math.min(index, result.length - 1)]
+          )
+        } else if (typeof result === 'object') {
+          result = this.data.map(data => result)
+        }
+      }
+      return result
     }
   },
   methods: {

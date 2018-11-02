@@ -1,8 +1,9 @@
 import { getConfs } from '@/lib'
 import path from './path'
+import schema from './schema'
 
 export default {
-  mixins: [path],
+  mixins: [schema, path],
   props: {
     conf: {
       type: [Boolean, Object, String, Function],
@@ -13,19 +14,6 @@ export default {
     }
   },
   computed: {
-    items () {
-      let result = Array.from(this.finalConf.items)
-      if (result) {
-        if (Array.isArray(result)) {
-          result = this.data.map(
-            (item, index) => result[Math.min(index, result.length - 1)]
-          )
-        } else if (typeof result === 'object') {
-          result = this.data.map(data => result)
-        }
-      }
-      return result
-    },
     properties () {
       let result = Array.from(this.finalConf.properties)
 
@@ -45,19 +33,22 @@ export default {
             const _result = {}
             result.forEach(
               name => {
-                _result[name] = this.normalize(name, this.getSchema(name))
+                const schema = this.getSchema(name)
+                _result[name] = this.normalize(name, schema)
               }
             )
             result = _result
           } else {
             Object.entries(result).forEach(
               ([name, property]) => {
-                result[name] = this.normalize(property, this.getSchema(name))
+                const schema = this.getSchema(name)
+                result[name] = this.normalize(property, schema)
               }
             )
           }
         } else if (typeof result === 'string') {
-          result = this.normalize(result, this.getSchema(result))
+          const schema = this.getSchema(result)
+          result = this.normalize(result, schema)
         }
       }
       return result
@@ -69,8 +60,14 @@ export default {
     },
     innerConf () {
       const result = Object.assign({}, this.finalConf)
-      result.containers = result.containers.slice(1)
-      delete result.path
+      if (result.containers) {
+        result.containers = result.containers.slice(1)
+        if (result.containers.length === 0) {
+          delete result.before
+          delete result.after
+          delete result.containers
+        }
+      }
       return result
     },
     container () {
@@ -78,7 +75,12 @@ export default {
     }
   },
   methods: {
-    resolve (elt, dft) {
+    /** Resolve an element in calling with some parameters if element is a function
+    * @param elt : element to resolve
+    * @param dft : default value to use if elt is undefined
+    * @param pub Boolean : private to this mixin. Used for resolving finalPath
+    */
+    resolve (elt, dft, pub = true) {
       if (elt === undefined) {
         elt = dft
       }
@@ -86,17 +88,15 @@ export default {
         const args = {
           id: this.id,
           conf: this.conf,
-          path: this.finalPath,
+          path: this.path,
           data: this.data,
           baseData: this.baseData,
           getData: this.getData,
-          schema: this.schema,
           getSchema: this.getSchema,
           getDefaultValue: this.getDefaultValue,
           baseSchema: this.baseSchema,
           scope: this.scope,
           confs: this.confs,
-          name: this.name,
           resolvePath: this.resolvePath,
           addItem: this.addItem,
           addProperty: this.addProperty,
@@ -107,17 +107,31 @@ export default {
           removeProperty: this.removeProperty,
           clear: this.clear
         }
+        if (pub) {
+          Object.assign(args, {
+            finalPath: this.finalPath,
+            name: this.name,
+            schema: this.schema
+          })
+        }
         elt = elt(args)
       }
       return elt
     },
+    /** Normalize input configuration with additional initialization parameters.
+    * @param conf Object|String|Boolean|Function : configuration to convert to an Object.
+    * @param schema Object : schema used to normalize input configuration (with schema.type for example). Default is this.schema.
+    * @param confs Object : default configurations to use with the function getConfs. By default, this.confs.
+    * @return Object
+    */
     getConf (conf, schema, confs) {
       let result = conf
-      let { mixins = true } = conf
-      const finalConfs = getConfs(confs)
+      const { mixins = true } = conf
       if (mixins) {
+        const finalConfs = getConfs(confs)
         const id = conf.is || (schema && schema.type) || 'default'
         let baseConf = finalConfs[id]
+
         if (typeof baseConf === 'function') {
           baseConf = this.resolve(baseConf)
         }
@@ -142,7 +156,7 @@ export default {
               ([name, mixin]) => {
                 if (typeof mixin === 'function') {
                   result[name] = mixin(baseConf[name], result[name])
-                } else if (name in baseConf) {
+                } else if (mixin && name in baseConf) {
                   result[name] = baseConf[name]
                 }
               }
@@ -151,6 +165,7 @@ export default {
             throw new Error(`Wrong mixins type : ${mixins}. Boolean, String, Function or Array expected.`)
           }
         }
+        delete result.mixins
       }
       return result
     },
@@ -198,8 +213,6 @@ export default {
           if (!Array.isArray(value)) {
             result[name] = [value]
           }
-        } else {
-          result[name] = []
         }
       }
 

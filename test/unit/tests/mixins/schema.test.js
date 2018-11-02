@@ -1,4 +1,4 @@
-import { check, newComponent } from '../util'
+import { check, newComponentFromMixin } from '../util'
 import mixin from '@/mixins/schema'
 
 const baseSchema = {
@@ -14,7 +14,7 @@ const baseSchema = {
   }
 }
 
-const component = newComponent(mixin)({ baseSchema })
+const component = newComponentFromMixin(mixin)({ baseSchema })
 
 describe('schema', () => {
   it('schema', () => expect(component.schema).toEqual(baseSchema))

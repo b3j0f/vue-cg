@@ -6,7 +6,7 @@ export default {
   props: {
     baseSchema: {
       type: Object,
-      required: true
+      default: () => ({})
     }
   },
   computed: {

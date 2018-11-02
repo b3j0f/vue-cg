@@ -15,7 +15,7 @@ export default {
     finalPath () {
       let result = absolutePath(this.path)
       if (this.conf) {
-        const conf = this.resolve(this.conf)
+        const conf = this.resolve(this.conf, {}, false)
         if (conf.path) {
           result = concatPath(this.path, conf.path)
         }
