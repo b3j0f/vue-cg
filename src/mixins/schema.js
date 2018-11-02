@@ -16,12 +16,12 @@ export default {
   },
   methods: {
     getSchema (path) {
-      const schemaPath = this.resolvePath(path)
+      const schemaPath = this.concatPath(path)
       return getSchema(this.baseSchema, schemaPath)
     },
     getDefaultValue (path) {
-      const schemaPath = this.resolvePath(path)
-      return getDefaultValue(this.baseSchema, schemaPath)
+      const schema = this.getSchema(path)
+      return getDefaultValue(schema)
     }
   }
 }
