@@ -49,6 +49,7 @@ describe('arrayMethods', () => {
     moveItemBackward: { params: ['moveItemBackward', 2], expectation: [4, 0, 3] },
     moveItemForward: { params: ['moveItemForward', 0], expectation: [0, 4, 3] },
     insertItem: { params: ['insertItem', 1, 6], expectation: [0, 6, 4, 3] },
+    insertItemValue: { params: ['insertItem'], expectation: [0, 6, 4, 3, 0] },
     clear: { params: ['clear'], expectation: [] }
   }
   check(func, tests)
@@ -63,6 +64,7 @@ describe('objectMethods', () => {
   const tests = {
     setValue: { params: ['setValue', 'a'], expectation: { 1: 1, 2: 2, 3: 3, a: 0 } },
     setValueValue: { params: ['setValue', 'a', 3], expectation: { 1: 1, 2: 2, 3: 3, a: 3 } },
+    setValueError: { params: ['setValue'], error: true },
     unsetValue: { params: ['unsetValue', 'a'], expectation: { 1: 1, 2: 2, 3: 3 } },
     clear: { params: ['clear'], expectation: {} }
   }
