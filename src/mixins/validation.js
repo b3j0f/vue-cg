@@ -19,16 +19,11 @@ export default {
         Object.entries(validations).forEach(
           ([name, validation]) => {
             if (validation === false && name in $params) {
-              if (result === true) {
-                result = {}
-              }
               result[name] = $params[name]
             }
           }
         )
-        if (result) {
-          this.$emit('error', { path: this.finalPath, errors: result })
-        }
+        this.$emit('error', { path: this.finalPath, errors: result })
       }
       return result
     }

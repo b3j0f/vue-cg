@@ -1,5 +1,6 @@
 import { check, newComponentFromMixin } from '../util'
 import mixin from '@/mixins/validation'
+import { required } from 'vuelidate/lib/validators'
 
 const mixedComponent = newComponentFromMixin(mixin)
 
@@ -22,7 +23,7 @@ describe('errors', () => {
   const func = props => mixedComponent(props).errors
   let validated = true
   const conf = { validations: { b: () => validated } }
-  const validations = { a: () => validated }
+  const validations = { a: () => validated, required }
 
   const tests = {
     default: { expectation: false },
@@ -42,8 +43,8 @@ describe('errors', () => {
   }
 
   const errors = {
-    validations: { params: [{ validations }], expectation: { a: null } },
-    conf: { params: [{ validations, conf }], expectation: { a: null, b: null } }
+    validations: { params: [{ validations }], expectation: { a: null, required: { type: 'required' } } },
+    conf: { params: [{ validations, conf }], expectation: { a: null, b: null, required: { type: 'required' } } }
   }
 
   check(errorFunc, errors)
