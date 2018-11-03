@@ -38,7 +38,7 @@ describe('mixins', () => {
 
   const tests = {
     string: { params: [{ is: 'password', mixins: 'is' }], expectation: fill({ is: 'input' }) },
-    function: { params: [{ is: 'default', mixins: () => ({ is: 'toto' }) }], expectation: fill() },
+    function: { params: [{ is: 'default', mixins: () => () => ({ is: 'toto' }) }], expectation: { is: 'toto' } },
     true: { params: [{ is: 'default', mixins: true }], expectation: fill() },
     array: { params: [{ is: 'default', mixins: ['is'] }], expectation: fill() },
     object: { params: [{ is: 'default', mixins: { is: true } }], expectation: fill() },
