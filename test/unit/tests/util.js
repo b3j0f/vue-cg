@@ -3,12 +3,15 @@ import Vue from 'vue'
 export const check = (fn, tests) => {
   Object.entries(tests).forEach(
     ([key, value]) => {
-      const { params = [], expectation, error, func } = value
+      const { params = [], expectation, error, input, output } = value
       it(key, () => {
         if ('expectation' in value) {
+          if (input) {
+            params.splice(0, params.length, input(...params))
+          }
           let res = fn(...params)
-          if (func) {
-            res = func(res)
+          if (output) {
+            res = output(res, params)
           }
           expect(res).toEqual(expectation)
         } else {

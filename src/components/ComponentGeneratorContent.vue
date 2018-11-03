@@ -175,22 +175,6 @@ export default {
           this.$emit('error', value)
         }
       }
-    },
-    model: {
-      get () {
-        let result = this.data
-        if (this.finalConf.input) {
-          result = this.resolve(this.finalConf.input, result)
-        }
-        return result
-      },
-      set (value) {
-        if (this.finalConf.output) {
-          value = this.resolve(this.finalConf.output, value)
-        }
-        this.$emit('update', {value, path: this.finalPath})
-        this.validate()
-      }
     }
   },
   methods: {

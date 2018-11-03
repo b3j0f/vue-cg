@@ -26,6 +26,7 @@ describe('getValidations', () => {
     }
   }
   const tests = {
+    default: { expectation: { } },
     undefined: { params: [validations], expectation: validations },
     root: { params: [validations, '/'], expectation: validations },
     simple: { params: [validations, 'a'], expectation: validations.a },
@@ -43,15 +44,15 @@ describe('generateValidations', () => {
   }
   const tests = {
     undefined: { expectation: { } },
-    validation: { func: Object.keys, params: [{ validation: () => true }], expectation: ['validation'] },
-    number: { func: multipleOf, params: [{ type: 'number', multipleOf: 1, minimum: 1, exclusiveMinimum: true, exclusiveMaximum: true, maximum: 3 }], expectation: ['multipleOf', 'minimum', 'maximum'] },
-    array: { func: Object.keys, params: [{ type: 'array', items: [{ type: 'object' }], minItems: 1, maxItems: 3 }], expectation: ['minItems', 'maxItems', '$each'] },
+    validation: { output: Object.keys, params: [{ validation: () => true }], expectation: ['validation'] },
+    number: { output: multipleOf, params: [{ type: 'number', multipleOf: 1, minimum: 1, exclusiveMinimum: true, exclusiveMaximum: true, maximum: 3 }], expectation: ['multipleOf', 'minimum', 'maximum'] },
+    array: { output: Object.keys, params: [{ type: 'array', items: [{ type: 'object' }], minItems: 1, maxItems: 3 }], expectation: ['minItems', 'maxItems', '$each'] },
     boolean: { params: [{ type: 'boolean' }], expectation: { } },
     object: { params: [{ type: 'object', properties: { a: { } }, required: ['a'] }], expectation: { a: { required: _required } } }
   }
   formats.forEach(
     format => {
-      tests[`string-${format}`] = { func: Object.keys, params: [{ type: 'string', format, minLength: 2, maxLength: 4, pattern: '^a.*' }], expectation: [format, 'minLength', 'maxLength', 'pattern'] }
+      tests[`string-${format}`] = { output: Object.keys, params: [{ type: 'string', format, minLength: 2, maxLength: 4, pattern: '^a.*' }], expectation: [format, 'minLength', 'maxLength', 'pattern'] }
     }
   )
   check(generateValidations, tests)

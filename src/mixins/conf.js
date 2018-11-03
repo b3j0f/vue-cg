@@ -94,7 +94,7 @@ export default {
           baseSchema: this.baseSchema,
           scope: this.scope,
           confs: this.confs,
-          resolvePath: this.resolvePath,
+          concatPath: this.concatPath,
           addItem: this.addItem,
           addProperty: this.addProperty,
           moveItem: this.moveItem,

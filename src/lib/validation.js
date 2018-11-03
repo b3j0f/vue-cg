@@ -114,7 +114,7 @@ export const generateValidations = (schema = {}) => {
   return result
 }
 
-export const getValidations = (validations, path = '/') => {
+export const getValidations = (validations = {}, path = '/') => {
   let result = validations
   const paths = path.split('/').filter(p => p)
   for (let p of paths) {
