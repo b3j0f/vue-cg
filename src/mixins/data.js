@@ -47,41 +47,61 @@ export default {
       const valuePath = this.concatPath(path)
       return getValue(this.baseData, valuePath)
     },
-    addItem (index, item) {
-      if (index === undefined) {
-        index = (this.data && this.data.length) || 0
+    setValue (key, value) {
+      const result = this.data || this.getDefaultValue()
+      if (key === undefined) {
+        if (Array.isArray(result)) {
+          key = result.length
+        } else {
+          throw new Error(`key is required with a data of type object`)
+        }
       }
-      const value = item === undefined ? this.getDefaultValue(index.toString()) : item
-      this.data.splice(index, 0, value)
-      this.model = this.data
+      if (value === undefined) {
+        value = this.getDefaultValue(key)
+      }
+      result[key] = value
+      this.model = result
+      return result
     },
-    addProperty (name) {
-      const value = this.getDefaultValue(name)
-      this.data[name] = value
-      this.model = this.data
+    unsetValue (key) {
+      const result = this.data || this.getDefaultValue()
+      if (Array.isArray(result)) {
+        result.splice(key, 1)
+      } else {
+        delete result[key]
+      }
+      this.model = result
+      return result
     },
-    removeItem (index) {
-      this.data.splice(index, 1)
-      this.model = this.data
-    },
-    removeProperty (name) {
-      delete this.data[name]
-      this.model = this.data
+    insertItem (index, value) {
+      const result = this.data || this.getDefaultValue()
+      if (index === undefined) {
+        index = result.length
+      }
+      if (value === undefined) {
+        value = this.getDefaultValue(index)
+      }
+      result.splice(index, 0, value)
+      this.model = result
+      return result
     },
     moveItem (oldIndex, newIndex) {
-      const [item] = this.data.splice(oldIndex, 1)
-      this.data.splice(newIndex, 0, item)
-      this.model = this.data
+      const result = this.data || this.getDefaultValue()
+      const [item] = result.splice(oldIndex, 1)
+      result.splice(newIndex, 0, item)
+      this.model = result
+      return result
     },
-    moveBackward (index) {
-      this.moveItem(index, index - 1)
+    moveItemBackward (index) {
+      return this.moveItem(index, index - 1)
     },
-    moveUpward (index) {
-      this.moveItem(index, index + 1)
+    moveItemForward (index) {
+      return this.moveItem(index, index + 1)
     },
     clear () {
-      const value = this.data.constructor()
-      this.model = value
+      const result = this.schema.type === 'array' ? [] : {}
+      this.model = result
+      return result
     }
   }
 }
