@@ -29,13 +29,13 @@ export default {
       get () {
         let result = this.data
         if (this.finalConf.input) {
-          result = this.resolve(this.finalConf.input, result)
+          result = this.call(this.finalConf.input, result)
         }
         return result
       },
       set (value) {
         if (this.finalConf.output) {
-          value = this.resolve(this.finalConf.output, value)
+          value = this.call(this.finalConf.output, value)
         }
         this.$emit('update', { value, path: this.finalPath })
         this.validate()
@@ -87,8 +87,10 @@ export default {
     },
     moveItem (oldIndex, newIndex) {
       const result = this.data || this.getDefaultValue()
-      const [item] = result.splice(oldIndex, 1)
-      result.splice(newIndex, 0, item)
+      if (oldIndex in result) {
+        const [item] = result.splice(oldIndex, 1)
+        result.splice(newIndex, 0, item)
+      }
       this.model = result
       return result
     },

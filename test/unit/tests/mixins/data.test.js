@@ -53,6 +53,25 @@ describe('arrayMethods', () => {
     clear: { params: ['clear'], expectation: [] }
   }
   check(func, tests)
+
+  const cmpt2 = mixedComponent({ baseSchema: { type: 'array', items: { type: 'number' } } })
+  const func2 = (name, ...params) => {
+    return cmpt2[name](...params)
+  }
+  const tests2 = {
+    setValue: { params: ['setValue'], expectation: [0] },
+    setValueValue: { params: ['setValue', 1, 4], expectation: [undefined, 4] },
+    unsetValue: { params: ['unsetValue', 0], expectation: [] },
+    moveItem: { params: ['moveItem', 1, 1], expectation: [] },
+    moveItemNext: { params: ['moveItem', 0, 2], expectation: [] },
+    moveItemPrev: { params: ['moveItem', 2, 0], expectation: [] },
+    moveItemBackward: { params: ['moveItemBackward', 2], expectation: [] },
+    moveItemForward: { params: ['moveItemForward', 0], expectation: [] },
+    insertItem: { params: ['insertItem', 1, 6], expectation: [6] },
+    insertItemValue: { params: ['insertItem'], expectation: [0] },
+    clear: { params: ['clear'], expectation: [] }
+  }
+  check(func2, tests2)
 })
 
 describe('objectMethods', () => {
@@ -69,4 +88,29 @@ describe('objectMethods', () => {
     clear: { params: ['clear'], expectation: {} }
   }
   check(func, tests)
+})
+
+describe('model', () => {
+  it('input/output', () => {
+    let ioCalled = 0
+    const double = value => {
+      ioCalled += 1
+      return value * 2
+    }
+    let updateCalled = 0
+    const update = ({ value }) => {
+      updateCalled += 1
+      baseData = value
+    }
+    let baseData = 1
+    const cmpt = mixedComponent({ baseData, conf: { input: double, output: double } })
+    cmpt.$on('update', update)
+    expect(cmpt.model).toEqual(2)
+    expect(cmpt.model).toEqual(2)
+    cmpt.model = 10
+    expect(cmpt.model).toEqual(2)
+    expect(ioCalled).toEqual(2)
+    expect(updateCalled).toEqual(1)
+    expect(baseData).toEqual(20)
+  })
 })

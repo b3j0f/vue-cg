@@ -72,6 +72,43 @@ export default {
     }
   },
   methods: {
+    getArgs (pub = true) {
+      const result = {
+        id: this.id,
+        conf: this.conf,
+        path: this.path,
+        data: this.data,
+        baseData: this.baseData,
+        getData: this.getData,
+        getSchema: this.getSchema,
+        getDefaultValue: this.getDefaultValue,
+        baseSchema: this.baseSchema,
+        scope: this.scope,
+        confs: this.confs,
+        concatPath: this.concatPath,
+        addItem: this.addItem,
+        addProperty: this.addProperty,
+        moveItem: this.moveItem,
+        moveBackward: this.moveBackward,
+        moveForward: this.moveForward,
+        removeItem: this.removeItem,
+        removeProperty: this.removeProperty,
+        clear: this.clear
+      }
+      if (pub) {
+        Object.assign(result, {
+          finalPath: this.finalPath,
+          name: this.name,
+          schema: this.schema
+        })
+      }
+      return result
+    },
+    call (func, ...params) {
+      const args = this.getArgs()
+      params.push(args)
+      return func(...params)
+    },
     /** Resolve an element in calling with some parameters if element is a function
     * @param elt : element to resolve
     * @param dft : default value to use if elt is undefined
@@ -82,35 +119,7 @@ export default {
         elt = dft
       }
       if (typeof elt === 'function') {
-        const args = {
-          id: this.id,
-          conf: this.conf,
-          path: this.path,
-          data: this.data,
-          baseData: this.baseData,
-          getData: this.getData,
-          getSchema: this.getSchema,
-          getDefaultValue: this.getDefaultValue,
-          baseSchema: this.baseSchema,
-          scope: this.scope,
-          confs: this.confs,
-          concatPath: this.concatPath,
-          addItem: this.addItem,
-          addProperty: this.addProperty,
-          moveItem: this.moveItem,
-          moveBackward: this.moveBackward,
-          moveForward: this.moveForward,
-          removeItem: this.removeItem,
-          removeProperty: this.removeProperty,
-          clear: this.clear
-        }
-        if (pub) {
-          Object.assign(args, {
-            finalPath: this.finalPath,
-            name: this.name,
-            schema: this.schema
-          })
-        }
+        const args = this.getArgs(pub)
         elt = elt(args)
       }
       return elt
