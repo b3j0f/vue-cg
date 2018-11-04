@@ -5,8 +5,10 @@
     :confs="confs"
     :conf="conf"
     :ctx="ctx"
+    :validations="validations"
     @update="updateHandler"
     @error="errorHandler"
+    ref="cgc"
   />
 </template>
 
@@ -16,7 +18,7 @@
  * Generate vue components from a javascript dictionnary.
  */
 import ComponentGeneratorContent from './ComponentGeneratorContent.vue'
-import {setValue, getDefaultValue, generateSchema} from '@/lib'
+import {setValue, getDefaultValue, generateSchema, generateValidations} from '@/lib'
 
 export default {
   components: {
@@ -48,26 +50,29 @@ export default {
   },
   data () {
     return {
-      localData: undefined
+      localData: this.data,
+      errors: {},
+      dirty: false
     }
   },
   computed: {
+    validations () {
+      return generateValidations(this.finalSchema)
+    },
     finalSchema () {
       let result = this.schema
       if (result === undefined) {
-        if (this.data === undefined && this.localData === undefined) {
+        if (this.localData === undefined) {
           result = generateSchema()
-        } else if (this.data === undefined) {
-          result = generateSchema(this.localData)
         } else {
-          result = generateSchema(this.data)
+          result = generateSchema(this.localData)
         }
       }
       this.$emit('update:schema', result)
       return result
     },
     finalData () {
-      let result = this.localData === undefined ? this.data : this.localData
+      let result = this.localData
       if (result === undefined) {
         result = getDefaultValue(this.schema)
       }
@@ -75,23 +80,38 @@ export default {
       return result
     },
     isDirty () {
-      const result = this.$v.$anyDirty
+      const result = this.dirty
       this.$emit('dirty', result)
       return result
     },
     hasErrors () {
-      const result = this.$v.$anyError || Object.keys(this.errors).length
-      this.$emit('error', result)
+      const result = Object.keys(this.errors).length === 0 ? false : this.errors
+      this.$emit('errors', result)
       return result
     }
   },
   methods: {
+    reset () {
+      this.dirty = false
+      this.errors = {}
+      this.$refs.cgc.reset()
+    },
     updateHandler (arg) {
       this.$emit('update', arg)
-      const {value, path} = arg
+      this.dirty = true
+      const { value, path } = arg
       this.localData = setValue(this.finalData, path, value)
     },
     errorHandler ({path, errors}) {
+      // clean deeper paths
+      Object.keys(this.errors).forEach(
+        key => {
+          if (key.startsWith(path)) {
+            delete this.errors[key]
+          }
+        }
+      )
+      // update this.errors with new entries
       if (errors) {
         this.errors[path] = errors
       } else {

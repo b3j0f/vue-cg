@@ -43,7 +43,7 @@ describe('generateValidations', () => {
     return Object.keys(val)
   }
   const tests = {
-    undefined: { expectation: { } },
+    default: { expectation: { } },
     validation: { output: Object.keys, params: [{ validation: () => true }], expectation: ['validation'] },
     number: { output: multipleOf, params: [{ type: 'number', multipleOf: 1, minimum: 1, exclusiveMinimum: true, exclusiveMaximum: true, maximum: 3 }], expectation: ['multipleOf', 'minimum', 'maximum'] },
     array: { output: Object.keys, params: [{ type: 'array', items: [{ type: 'object' }], minItems: 1, maxItems: 3 }], expectation: ['minItems', 'maxItems', '$each'] },

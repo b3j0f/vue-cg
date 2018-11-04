@@ -74,25 +74,28 @@ export default {
   methods: {
     getArgs (pub = true) {
       const result = {
+        // props/computed
         id: this.id,
         conf: this.conf,
         path: this.path,
         data: this.data,
         baseData: this.baseData,
+        baseSchema: this.baseSchema,
+        ctx: this.ctx,
+        confs: this.confs,
+        // methods
         getData: this.getData,
         getSchema: this.getSchema,
         getDefaultValue: this.getDefaultValue,
-        baseSchema: this.baseSchema,
-        scope: this.scope,
-        confs: this.confs,
+        getValidations: this.getValidations,
+        validate: this.validate,
         concatPath: this.concatPath,
-        addItem: this.addItem,
-        addProperty: this.addProperty,
+        insertItem: this.insertItem,
+        setValue: this.setValue,
         moveItem: this.moveItem,
-        moveBackward: this.moveBackward,
-        moveForward: this.moveForward,
-        removeItem: this.removeItem,
-        removeProperty: this.removeProperty,
+        moveItemBackward: this.moveItemBackward,
+        moveItemForward: this.moveItemForward,
+        unsetValue: this.unsetValue,
         clear: this.clear
       }
       if (pub) {

@@ -39,6 +39,10 @@ describe('errors', () => {
     expect(cmpt.$v.$anyError).toEqual(false)
     cmpt.validate()
     expect(cmpt.$v.$anyError).toEqual(true)
+    cmpt.reset()
+    expect(cmpt.$v.$anyError).toEqual(false)
+    cmpt.validate()
+    expect(cmpt.$v.$anyError).toEqual(true)
     return cmpt.errors
   }
 

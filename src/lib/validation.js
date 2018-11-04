@@ -51,6 +51,7 @@ export const generateValidations = (schema = {}) => {
   if (validation) { // custom validation
     result.validation = validation
   }
+
   if (type === 'string') {
     if (format in formats) {
       result[format] = formats[format]

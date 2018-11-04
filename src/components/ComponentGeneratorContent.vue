@@ -47,7 +47,7 @@
           :key="`${id}-property-${name}`"
           :conf="property" :path="concatPath(name)"
           v-bind="props" v-on="on"
-          @input="inputComposite(name, arguments[0])"
+          @update="updateHandler(name, arguments[0])"
         />
         <slot name="moveBackward">
           <button :key="`${id}-backward-${name}`" @click="moveBackward(name)">backward</button>
@@ -79,7 +79,7 @@
           :key="`${id}-item-${index}`"
           :conf="item" :path="concatPath(index.toString())"
           v-bind="props" v-on="on"
-          @input="inputComposite(index.toString(), arguments[0])"
+          @update="updateHandler(index.toString(), arguments[0])"
         />
         <slot name="moveBackward">
           <button :key="`${id}-backward-${index}`" @click="moveBackward(name)">backward</button>
@@ -122,7 +122,7 @@
  *
  * Generate vue components from a javascript dictionnary.
  */
-import {conf, data, path, schema, validation} from '@/mixins'
+import { conf, data, path, schema, validation } from '@/mixins'
 
 function guid () {
   function s4 () {
@@ -143,7 +143,7 @@ export default {
     },
     ctx: {
       type: Object,
-      required: true
+      default: () => ({})
     },
     isContained: {
       type: Boolean,
@@ -178,9 +178,9 @@ export default {
     }
   },
   methods: {
-    inputComposite (key, value) {
+    updateHandler (key, value) {
       const path = this.concatPath(key)
-      this.$emit('update', {value: path})
+      this.$emit('update', { value, path })
     }
   }
 }

@@ -43,6 +43,9 @@ export default {
     getValidations (path) {
       const validationsPath = this.concatPath(path)
       return getValidations(this.validations, validationsPath)
+    },
+    reset () {
+      this.$v.$reset()
     }
   }
 }
