@@ -23,7 +23,6 @@ export default {
             }
           }
         )
-        this.$emit('error', { path: this.finalPath, errors: result })
       }
       return result
     }

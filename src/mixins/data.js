@@ -39,6 +39,7 @@ export default {
         }
         this.$emit('update', { value, path: this.finalPath })
         this.validate()
+        this.$emit('errors', { path: this.finalPath, errors: this.errors })
       }
     }
   },
