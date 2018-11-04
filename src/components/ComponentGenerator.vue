@@ -18,8 +18,7 @@
  * Generate vue components from a javascript dictionnary.
  */
 import ComponentGeneratorContent from './ComponentGeneratorContent.vue'
-import {setValue, getDefaultValue, generateSchema, generateValidations} from '@/lib'
-import Vue from 'vue'
+import { setValue, getDefaultValue, generateSchema, generateValidations } from '@/lib'
 
 export default {
   components: {
@@ -56,11 +55,6 @@ export default {
       dirty: false,
       localSchema: this.schema
     }
-  },
-  mounted () {
-    this.$nextTick()
-    const dirty = this.isDirty
-    const errors = this.hasErrors
   },
   computed: {
     validations () {
@@ -128,7 +122,7 @@ export default {
       }
       this.$emit('update:data', this.finalData)
     },
-    errorsHandler ({path, errors}) {
+    errorsHandler ({ path, errors }) {
       // clean deeper paths
       Object.keys(this.localErrors).forEach(
         key => {

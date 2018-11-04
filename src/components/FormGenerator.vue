@@ -1,28 +1,27 @@
 <template>
   <div v-bind="container">
     <component-generator
+      v-model="model"
       :schema="schema"
       :data="localData"
       :confs="confs"
       :conf="conf"
       :ctx="ctx"
       v-on="$listeners"
-      @update:data="updateDataHandler"
-      @error="errorHandler"
-      @dirty="dirtyHandler"
+      ref="cg"
     />
-    <div v-bind="actionsContainer">
-      <slot name="actions">
+    <slot name="actions">
+      <div v-bind="actionsContainer">
         <button :disabled="!dirty && !(error)" @click="submitHandler" />
-        <button :disabled="!dirty" @click="clearHandler" />
-      </slot>
-    </div>
+        <button :disabled="!dirty" @click="resetHandler" />
+      </div>
+    </slot>
   </div>
 </template>
 
 <script>
 import ComponentGenerator from './ComponentGenerator.vue'
-import {getDefaultValue} from '@/lib'
+import { getDefaultValue } from '@/lib'
 
 export default {
   components: {
@@ -61,30 +60,40 @@ export default {
   data () {
     const data = this.data || getDefaultValue(this.schema)
     return {
-      dirty: false,
-      error: false,
       localData: data,
       initialData: data
     }
   },
+  computed: {
+    model: {
+      get () {
+        return this.localData
+      },
+      set (val) {
+        this.localData = val
+        this.$emit('update:data', val)
+      }
+    },
+    isDirty () {
+      return this.$refs.cg.isDirty
+    },
+    errors () {
+      return this.$refs.cg.errors
+    }
+  },
   methods: {
-    dirtyHandler (dirty) {
-      this.dirty = dirty
-    },
-    errorHandler (error) {
-      this.error = error
-    },
-    clearHandler () {
+    reset () {
+      this.$refs.cg.reset()
       this.localData = this.initialData
-      this.$emit('clear', this.localData)
+      this.$emit('reset', this.localData)
       this.$emit('update:data', this.localData)
+    },
+    resetHandler () {
+      this.reset()
     },
     submitHandler () {
       this.initialData = this.localData
       this.$emit('submit', this.localData)
-    },
-    updateDataHandler (data) {
-      this.localData = data
     }
   }
 }

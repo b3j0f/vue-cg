@@ -1,6 +1,5 @@
 import { newComponent } from '../util'
 import CG from '@/components/ComponentGenerator.vue'
-import Vue from 'vue'
 
 const newCG = (props, on) => newComponent(CG)(props, on)
 
@@ -33,9 +32,8 @@ describe('validation', () => {
     update: undefined,
     data: undefined
   }
-  let called = false
   const update = val => { states.update = val }
-  const errors = val => { states.errors = val; called = val }
+  const errors = val => { states.errors = val }
   const dirty = val => { states.dirty = val }
   const data = val => { states.data = val }
 
