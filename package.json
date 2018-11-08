@@ -1,10 +1,18 @@
 {
   "name": "vue-cg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vue component generator using a (dynamic) configuration, a (generated) json schema and a (generated) data-binding",
   "author": "link-society <contact@link-society.com> (https://link-society.com)",
   "main": "index.js",
-  "keywords": ["vue", "component", "generator", "generated", "form", "schema", "data"],
+  "keywords": [
+    "vue",
+    "component",
+    "generator",
+    "generated",
+    "form",
+    "schema",
+    "data"
+  ],
   "license": {
     "type": "Apache-2.0",
     "url": "https://opensource.org/licenses/apache2.0.php"
