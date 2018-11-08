@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/vue-cg.svg?maxAge=2592000)](https://www.npmjs.com/package/vue-cg)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 [![Apache2 License](https://img.shields.io/badge/license-Apache 2-blue.svg)](https://git.link-society.com/link-society/vue-cg/src/master/LICENSE)
+[![Build Status](https://travis-ci.com/b3j0f/vue-cg.svg?branch=master)](https://travis-ci.com/b3j0f/vue-cg)
 
 > Vue component generator using a (dynamic) configuration, a (generated) json schema and a (generated) data-binding
 
@@ -154,29 +155,32 @@ All properties designated with a star '*' can be given such as a function. In su
 
 ##### Properties
 
-* path : String ('/'): concatenation of component path and configuration path
-* name : String : path value after the last slash '/'
-* baseSchema : Object ({type: 'object'}) : schema generator.
-* schema : Object ({type: 'object'}) : component schema
-* baseData : data generator
-* data : component generator
-* id : component id
-* conf : component configuration
+* path: String ('/'): concatenation of component path and configuration path
+* name: String : path value after the last slash '/'
+* baseSchema: Object ({type: 'object'}) : schema generator.
+* schema: Object ({type: 'object'}) : component schema
+* baseData: data generator
+* data: component generator
+* id: universal unique component id
+* conf: component configuration
+* ctx: context property object
+* confs: set of default configurations
 
 ##### Methods
-* resolve
-* getPath
-* getSchema
-* getData
-* getDefaultValue
-* addItem
-* addProperty
-* moveItem
-* moveUpward
-* moveBackward
-* removeItem
-* removeProperty
-* clear
+* getPath (path = '.'): get a path from current component
+* getSchema (path = '.'): get a schema from current component schema
+* getData (path = '.'): get data value from current component data
+* getDefaultValue (path = '.'): get schema data from current component schema
+* getValidations (path = '.'): get data validations from current component validations
+* validate (data = getData()): validate input data
+* concatPath (path): concat input path to current component path
+* setValue (key, value=getDefaultValue()): set value at input key. If key is undefined and data is an array, value is array.length. Throw an error in case of an object.
+* insertItem (index, value): data array specific. insert value at input index, in moving forward next values.
+* moveItem (old, new): data array specific. move input old item index to new item index
+* moveItemBackward (index): data array specific. move input keyed item backward in the array
+* moveItemForward (index): data array specific. move input keyed item forward in the array
+* unsetValue (key): remove keyed property/item from current component data
+* clear: reset current component data (empty object/array).
 
 ## Contribute
 
