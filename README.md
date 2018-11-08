@@ -1,6 +1,6 @@
 # vue-cg (vue component generator)
 
-[![npm version](https://img.shields.io/npm/v/vue-cg.svg?maxAge=2592000)](https://www.npmjs.com/package/vue-cg)
+[![npm version](https://badge.fury.io/js/vue-cg.svg)](https://badge.fury.io/js/vue-cg)
 [![vue2](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org/)
 [![Apache2 License](https://img.shields.io/badge/license-Apache 2-blue.svg)](https://git.link-society.com/link-society/vue-cg/src/master/LICENSE)
 [![Build Status](https://travis-ci.com/b3j0f/vue-cg.svg?branch=master)](https://travis-ci.com/b3j0f/vue-cg)
@@ -121,7 +121,7 @@ import {ComponentGenerator} from 'vue-cg'
 
 - id : String : default is generated from uuid v4 or from conf.id
 - data : used as v-model. Default is generated from the schema. If not schema, default is empty object
-- conf : Object|String|Boolean|Function : component configuration. See the section [Configuration](#Configuration) for more details
+- conf : Object|String|Boolean|Function : component configuration. See the section [Configuration](#configuration) for more details
 - schema : Object : json schema v3 to v7. By default, generated from 'data'. If no data is given, schema is {type: 'object'}
 - ctx : Object : used to add specific properties at component runtime
 
@@ -184,7 +184,7 @@ All properties designated with a star '*' can be given such as a function. In su
 
 ## Contribute
 
-Sources : https://git.link-society.com/link-society/vue-cg.git
+Sources : https://github.com/b3j0f/vue-cg.git
 
 ``` bash
 # install dependencies
